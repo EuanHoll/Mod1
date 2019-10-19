@@ -1,5 +1,6 @@
 import pygame
 
+
 def load_icon(icon_name):
     image_loc = "resources/images/" + icon_name
     image = pygame.image.load(image_loc)

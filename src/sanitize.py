@@ -1,5 +1,6 @@
 import map
 
+
 def sanitize (str_ar):
     val = len(str_ar[0].split())
     map_data = map.Map(val, len(str_ar), [])
