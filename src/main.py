@@ -1,9 +1,7 @@
-import pygame
 import sys
 import sanitize
-from pygame.locals import *
-from OpenGL.GL import *
-from OpenGL.GLU import *
+import viewer
+import map
 
 def main():
 	if len(sys.argv) != 2:
@@ -12,6 +10,7 @@ def main():
 	data = san_check(sys.argv[1])
 	if data is None:
 		return None
+	viewer.viewer(data)
 	print("Finished")
 
 def san_check(file_loc):
