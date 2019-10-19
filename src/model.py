@@ -1,6 +1,7 @@
 from OpenGL.GL import *
 import numpy as np
 
+# Opengl VAO and VBO information
 class Model:
     def __init__(self, vao_id, vbos, vert_count):
         self.vao_id = vao_id
@@ -8,12 +9,14 @@ class Model:
         self.vert_count = vert_count
 
 
+# Deletes VAO and VBO information from buffers
 def clean_up_model(model):
     vaos = [model.vao_id]
     glDeleteVertexArrays(1, vaos)
     glDeleteBuffers(len(model.vbo_ids), np.asarray(model.vbo_ids))
 
 
+# Creates VAO and VBO information from Info_3d information
 def create_model_from_3d(info_3d):
     vao_id = create_vao()
     vbos = create_data(info_3d)
@@ -21,6 +24,7 @@ def create_model_from_3d(info_3d):
     return Model(vao_id, vbos, len(info_3d.verts))
 
 
+# Converts verts and indices to VBO information
 def create_data(info_3d):
     vbos = [glGenBuffers(1), glGenBuffers(1)]
     glBindBuffer(GL_ARRAY_BUFFER, vbos[0])
@@ -33,11 +37,13 @@ def create_data(info_3d):
     return vbos
 
 
+# Creates the initial VAO
 def create_vao():
     vao_id = glGenVertexArrays(1)
     glBindVertexArray(vao_id)
     return vao_id
 
 
+# Unbinds the VAO from the buffer
 def unbind_vao():
     glBindVertexArray(0)

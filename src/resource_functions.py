@@ -1,6 +1,7 @@
 import pygame
 
 
+# Loads an image to the correct icon format
 def load_icon(icon_name):
     image_loc = "resources/images/" + icon_name
     image = pygame.image.load(image_loc)
@@ -15,6 +16,7 @@ def load_icon(icon_name):
     return surface
 
 
+# Loads an image to a surface
 def load_image(image_name):
     image_loc = "resources/images/" + image_name
     image = pygame.image.load(image_loc)

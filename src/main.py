@@ -14,6 +14,7 @@ def main():
 	print("Finished")
 
 
+# Reads mod1 file from passed location and sanitizes it
 def get_file(file_loc):
 	if not file_loc.endswith('.mod1'):
 		print("Please choose a .mod1 file")
