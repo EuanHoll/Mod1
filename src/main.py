@@ -1,19 +1,18 @@
 import sys
 import sanitize
 import viewer
-import map
 
 def main():
 	if len(sys.argv) != 2:
 		print("Please choose a single .mod1 file")
 		return
-	data = san_check(sys.argv[1])
+	data = get_file(sys.argv[1])
 	if data is None:
 		return None
 	viewer.viewer(data)
 	print("Finished")
 
-def san_check(file_loc):
+def get_file(file_loc):
 	if not file_loc.endswith('.mod1'):
 		print("Please choose a .mod1 file")
 		return None
