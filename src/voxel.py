@@ -339,12 +339,12 @@ class Voxel_Data:
         info = np.empty((self.width, self.height, self.depth))
         info.fill(0)
         z = 0
-        while z < self.height / 3:
+        while z < 2:
             y = 0
-            while y < self.depth - 1:
+            while y < self.depth:
                 x = 0
-                while x < self.width - 1:
-                    info[x][y][z] = self.surface_level + 0.1
+                while x < self.width:
+                    info[x][z][y] = self.surface_level + 0.1
                     x += 1
                 y += 1
             z += 1
@@ -352,9 +352,9 @@ class Voxel_Data:
 
 
 class Voxel:
-    def __init__(self, voxel_data):
+    def __init__(self, voxel_data, max_width, max_height, max_depth):
         self.voxel_data = voxel_data
-        self.verts = create_verts_from_data(voxel_data)
+        self.verts = create_verts_from_data(voxel_data, max_width, max_height, max_depth)
 
     def draw_mesh(self):
         glBegin(GL_TRIANGLES)
@@ -368,7 +368,7 @@ class Voxel:
         glEnd()
 
 
-def create_verts_from_data(voxel_data):
+def create_verts_from_data(voxel_data, max_width, max_height, max_depth):
     verts = []
     z = 0
     while z < voxel_data.height - 1:
@@ -376,16 +376,15 @@ def create_verts_from_data(voxel_data):
         while y < voxel_data.depth - 1:
             x = 0
             while x < voxel_data.width - 1:
-                calc_chunk(x, y, z, voxel_data, verts)
+                calc_chunk(x, y, z, voxel_data, verts, (max_width, max_height, max_depth))
                 x += 1
             y += 1
         z += 1
-    print("Create " + str(len(verts)) + " Verts")
     return verts
 
 
-def calc_chunk(x, y, z, voxel_data, verts):
-    corners = get_corners(x, y, z, voxel_data)
+def calc_chunk(x, y, z, voxel_data, verts, maxes):
+    corners = get_corners(x, y, z, voxel_data, maxes)
     cube_index = get_cube_index(corners, voxel_data.surface_level)
     i = 0
     while tri_table[cube_index][i] != -1:
@@ -430,13 +429,19 @@ def get_cube_index(corners, surface_level):
     return cube_index
 
 
-def get_corners(x, y, z, voxel_data):
-    return [(x, y, z, voxel_data.stored[x][y][z]),
-            (x + 1, y, z, voxel_data.stored[x + 1][y][z]),
-            (x + 1, y, z + 1, voxel_data.stored[x + 1][y][z + 1]),
-            (x, y, z + 1, voxel_data.stored[x][y][z + 1]),
-            (x, y + 1, z, voxel_data.stored[x][y + 1][z]),
-            (x + 1, y + 1, z, voxel_data.stored[x + 1][y + 1][z]),
-            (x + 1, y + 1, z + 1, voxel_data.stored[x + 1][y + 1][z + 1]),
-            (x, y + 1, z + 1, voxel_data.stored[x][y + 1][z + 1])]
+def get_corners(x, y, z, voxel_data, maxes):
+    n_x = (x / voxel_data.width) * maxes[0]
+    n_y = (y / voxel_data.depth) * maxes[2]
+    n_z = (z / voxel_data.height) * maxes[1]
+    n_x_o = 1 / maxes[0]
+    n_y_o = 1 / maxes[1]
+    n_z_o = 1 / maxes[2]
+    return [(n_x, n_y, n_z, voxel_data.stored[x][z][y]),
+            (n_x + n_x_o, n_y, n_z, voxel_data.stored[x + 1][z][y]),
+            (n_x + n_x_o, n_y, n_z + n_z_o, voxel_data.stored[x + 1][z + 1][y]),
+            (n_x, n_y, n_z + n_z_o, voxel_data.stored[x][z + 1][y]),
+            (n_x, n_y + n_y_o, n_z, voxel_data.stored[x][z][y + 1]),
+            (n_x + n_x_o, n_y + n_y_o, n_z, voxel_data.stored[x + 1][z][y + 1]),
+            (n_x + n_x_o, n_y + n_y_o, n_z + n_z_o, voxel_data.stored[x + 1][z + 1][y + 1]),
+            (n_x, n_y + n_y_o, n_z + n_z_o, voxel_data.stored[x][z + 1][y + 1])]
 

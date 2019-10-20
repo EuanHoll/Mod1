@@ -7,10 +7,9 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-
 def viewer(map_data):
     pygame.init()
-    screen = pygame.display.set_mode((c.S_WIDTH, c.S_HEIGHT), DOUBLEBUF|OPENGL)
+    screen = pygame.display.set_mode((c.S_WIDTH, c.S_HEIGHT), DOUBLEBUF|OPENGLBLIT)
     pygame.display.set_caption("Mod1")
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, c.S_RATIO, 0.1, 1000)
@@ -24,14 +23,22 @@ def viewer(map_data):
 
 def loop(screen, map_3d):
     running = True
-    water = vx.Voxel(vx.Voxel_Data(10, 10, 10, 0.6, 2))
+    water = vx.Voxel(vx.Voxel_Data(map_3d.width * 10, 10, map_3d.height * 10, 0.6, 2), map_3d.width, 10, map_3d.height)
+    i = rf.get_time()
+    fps = 0
+    counter = 0
     while running:
         for event in pygame.event.get():
             running = event_handling(event)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         water.draw_mesh()
         map_3d.draw_map()
+        rf.draw_text(str(fps), (0, 0))
+        if rf.get_time() - i > 1000:
+            fps = counter
+            counter = 0
         pygame.display.flip()
+        counter += 1
     pygame.quit()
     quit()
 
