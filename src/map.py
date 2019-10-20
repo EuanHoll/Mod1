@@ -21,6 +21,7 @@ class Map_3d:
             x = 0
             while x < self.width - 1:
                 i = (y * self.width) + x
+                glColor3fv()
                 glVertex3fv(self.verts[i - self.width])
                 glVertex3fv(self.verts[i - self.width + 1])
                 glVertex3fv(self.verts[i + 1])
