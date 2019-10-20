@@ -6,15 +6,18 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+
 def viewer(map_data):
     pygame.init()
     screen = pygame.display.set_mode((1280, 720), DOUBLEBUF|OPENGL)
     pygame.display.set_caption("Mod1")
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, (1280/720), 0.1, 1000)
-    glTranslatef(0.0, 0.0, -5)
-    glRotatef(0, 0, 0, 0)
+    glTranslatef(-4, -4, -10)
+    glRotatef(45, -90, 0, 0)
+    glEnable(GL_DEPTH_TEST)
     loop(screen, map_data)
+
 
 def loop(screen, map_data):
     running = True
@@ -28,6 +31,7 @@ def loop(screen, map_data):
     pygame.quit()
     quit()
 
+
 def event_handling(event):
     if event.type == pygame.QUIT:
         return False
@@ -35,19 +39,8 @@ def event_handling(event):
         return key_controls(event)
     return True
 
+
 def key_controls(event):
     if event.key == pygame.K_ESCAPE:
         return False
-    if event.key == pygame.K_w:
-        glTranslatef(0, 0, 1)
-    if event.key == pygame.K_s:
-        glTranslatef(0, 0, -1)
-    if event.key == pygame.K_a:
-        glTranslatef(1, 0, 0)
-    if event.key == pygame.K_d:
-        glTranslatef(-1, 0, 0)
-    if event.key == pygame.K_z:
-        glTranslatef(0, -1, 0)
-    if event.key == pygame.K_x:
-        glTranslatef(0, 1, 0)
     return True

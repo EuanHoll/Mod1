@@ -8,7 +8,7 @@ def get_map_3d(map_data):
         y = 0
         while y < map_data.height:
             i = (y * map_data.width) + x
-            verts.append((x, int(map_data.array[i]), y))
+            verts.append((x, y, int(map_data.array[i])))
             if (x + 1) % map_data.width != 0:
                 edges.append((i, i + 1))
             if y > 0:
