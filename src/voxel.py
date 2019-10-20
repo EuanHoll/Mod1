@@ -307,8 +307,10 @@ class Voxel_Data:
             self.stored = self.create_empty()
         elif is_full == 1:
             self.stored = self.create_full()
+        elif is_full == 2:
+            self.stored = self.create_level()
         else:
-            self.stored = self.create_surface()
+            self.stored = self.create_random()
 
     def create_empty(self):
         info = np.zeros((self.width, self.height, self.depth))
@@ -319,7 +321,7 @@ class Voxel_Data:
         info.fill(1)
         return info
 
-    def create_surface(self):
+    def create_random(self):
         info = np.empty((self.width, self.height, self.depth))
         z = 0
         while z < self.height - 1:
@@ -333,16 +335,30 @@ class Voxel_Data:
             z += 1
         return info
 
+    def create_level(self):
+        info = np.empty((self.width, self.height, self.depth))
+        info.fill(0)
+        z = 0
+        while z < self.height / 3:
+            y = 0
+            while y < self.depth - 1:
+                x = 0
+                while x < self.width - 1:
+                    info[x][y][z] = self.surface_level + 0.1
+                    x += 1
+                y += 1
+            z += 1
+        return info
+
 
 class Voxel:
     def __init__(self, voxel_data):
         self.voxel_data = voxel_data
         self.verts = create_verts_from_data(voxel_data)
-        print(len(self.verts))
 
     def draw_mesh(self):
         glBegin(GL_TRIANGLES)
-        glColor4f(0, 0, 1, 0.5)
+        glColor4f(0, 0, 1, 0.01)
         i = 0
         while i < len(self.verts):
             glVertex3fv(self.verts[i])
@@ -364,6 +380,7 @@ def create_verts_from_data(voxel_data):
                 x += 1
             y += 1
         z += 1
+    print("Create " + str(len(verts)) + " Verts")
     return verts
 
 

@@ -15,6 +15,7 @@ def viewer(map_data):
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, c.S_RATIO, 0.1, 1000)
     map_3d = terrain.get_map_3d(map_data)
+    glTranslatef(-(map_3d.width / 2), -(map_3d.height / 2), -10)
     glRotatef(45, -90, 0, 0)
     glEnable(GL_DEPTH_TEST)
     glClearColor(0.411, 0.451, 0.5412, 1)
@@ -24,13 +25,12 @@ def viewer(map_data):
 def loop(screen, map_3d):
     running = True
     water = vx.Voxel(vx.Voxel_Data(10, 10, 10, 0.6, 2))
-    glTranslatef(-(water.voxel_data.width / 2), -(water.voxel_data.depth / 2), -10)
     while running:
         for event in pygame.event.get():
             running = event_handling(event)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        map_3d.draw_map()
         water.draw_mesh()
+        map_3d.draw_map()
         pygame.display.flip()
     pygame.quit()
     quit()
