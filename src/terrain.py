@@ -1,5 +1,6 @@
 import map
 
+
 def get_map_3d(map_data):
     verts = []
     y = 0

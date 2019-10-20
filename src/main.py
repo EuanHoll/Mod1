@@ -2,6 +2,7 @@ import sys
 import sanitize
 import viewer
 
+
 def main():
 	if len(sys.argv) != 2:
 		print("Please choose a single .mod1 file")
@@ -11,6 +12,7 @@ def main():
 		return None
 	viewer.viewer(data)
 	print("Finished")
+
 
 def get_file(file_loc):
 	if not file_loc.endswith('.mod1'):
@@ -23,6 +25,7 @@ def get_file(file_loc):
 		print("Please chose a valid .mod1 file")
 		return None
 	return sanitize.sanitize(data)
+
 
 if __name__ == "__main__":
 	main()
