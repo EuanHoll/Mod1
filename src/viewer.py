@@ -14,16 +14,16 @@ def viewer(map_data):
     pygame.display.set_caption("Mod1")
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, c.S_RATIO, 0.1, 1000)
-    glTranslatef(-4, -4, -10)
+    map_3d = terrain.get_map_3d(map_data)
+    glTranslatef(-(map_3d.width / 2), -(map_3d.height / 2), -10)
     glRotatef(45, -90, 0, 0)
     glEnable(GL_DEPTH_TEST)
     glClearColor(0.411, 0.451, 0.5412, 1)
-    loop(screen, map_data)
+    loop(screen, map_3d)
 
 
-def loop(screen, map_data):
+def loop(screen, map_3d):
     running = True
-    map_3d = terrain.get_map_3d(map_data)
     while running:
         for event in pygame.event.get():
             running = event_handling(event)
