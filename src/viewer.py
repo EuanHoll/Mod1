@@ -3,6 +3,7 @@ import resource_functions as rf
 import pygame
 import model
 import renderer
+import shader
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -23,12 +24,17 @@ def viewer(map_data):
 def loop(map_data):
     running = True
     model_terrain = model.create_model_from_3d(terrain.get_map_verts(map_data))
+    shader_terrain = shader.Shader("resources/shaders/terrain_vertex.glsl", "resources/shaders/terrain_fragment.glsl")
     while running:
         for event in pygame.event.get():
             running = event_handling(event)
         renderer.prepare_frame()
-        renderer.render_model(model_terrain)
+        shader_terrain.start_shader()
+        glColor3fv((0, 1, 0))
+        renderer.render_model(model_terrain, shader_terrain)
+        shader_terrain.stop_shader()
         pygame.display.flip()
+    shader_terrain.clean_up()
     model.clean_up_model(model_terrain)
     pygame.quit()
     quit()
@@ -56,7 +62,7 @@ def key_controls(event):
     if event.key == pygame.K_d:
         glTranslatef(-1, 0, 0)
     if event.key == pygame.K_z:
-        glTranslatef(0, 1, 0)
-    if event.key == pygame.K_x:
         glTranslatef(0, -1, 0)
+    if event.key == pygame.K_x:
+        glTranslatef(0, 1, 0)
     return True

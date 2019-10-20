@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f50c55c8-31fc-4dc5-8873-e66e9f09da32" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/util_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/mod1_files/start.mod1" beforeDir="false" afterPath="$PROJECT_DIR$/resources/mod1_files/start.mod1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/resource_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/resource_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sanitize.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sanitize.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/terrain.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/terrain.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/viewer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,31 +27,31 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="glsl" value="2" />
-          <entry key="mod1" value="3" />
-          <entry key="py" value="28" />
+          <entry key="glsl" value="5" />
+          <entry key="mod1" value="5" />
+          <entry key="py" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="GLSL shader file" value="1" />
-          <entry key="PLAIN_TEXT" value="4" />
-          <entry key="Python" value="28" />
+          <entry key="GLSL shader file" value="4" />
+          <entry key="PLAIN_TEXT" value="6" />
+          <entry key="Python" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="1" />
-          <entry key="glsl" value="286" />
-          <entry key="mod1" value="76" />
-          <entry key="py" value="8130" />
+          <entry key="glsl" value="355" />
+          <entry key="mod1" value="147" />
+          <entry key="py" value="12670" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="GLSL shader file" value="286" />
-          <entry key="PLAIN_TEXT" value="77" />
-          <entry key="Python" value="8130" />
+          <entry key="GLSL shader file" value="355" />
+          <entry key="PLAIN_TEXT" value="148" />
+          <entry key="Python" value="12670" />
         </counts>
       </usages-collector>
     </session>
@@ -61,54 +59,92 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/shader.py">
+        <entry file="file://$PROJECT_DIR$/src/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="587">
+              <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
               <folding>
-                <marker date="1571519253852" expanded="true" signature="13:18" ph="..." />
+                <element signature="e#0#23#0" expanded="true" />
+                <marker date="1571519541234" expanded="true" signature="89:94" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sanitize.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="30" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="30" />
-              <folding>
-                <marker date="1571519624745" expanded="true" signature="66:67" ph="..." />
-                <marker date="1571519624745" expanded="true" signature="66:71" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/terrain.py">
+        <entry file="file://$PROJECT_DIR$/resources/shaders/terrain_vertex.glsl">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+              <caret line="11" column="34" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/viewer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="33" column="18" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
               <folding>
-                <marker date="1571519739063" expanded="true" signature="104:109" ph="..." />
-                <marker date="1571519739063" expanded="true" signature="580:680" ph="..." />
-                <marker date="1571519739063" expanded="true" signature="762:763" ph="..." />
-                <marker date="1571519739063" expanded="true" signature="762:767" ph="..." />
+                <element signature="e#0#14#0" expanded="true" />
+                <marker date="1571528226536" expanded="true" signature="251:256" ph="..." />
+                <marker date="1571528226536" expanded="true" signature="541:546" ph="..." />
+                <marker date="1571528226536" expanded="true" signature="1244:1245" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/mod1_files/start.mod1">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/shader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="25" column="60" selection-start-line="25" selection-start-column="60" selection-end-line="25" selection-end-column="60" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+                <marker date="1571528438876" expanded="true" signature="96:101" ph="..." />
+                <marker date="1571528438876" expanded="true" signature="786:993" ph="..." />
+                <marker date="1571528438876" expanded="true" signature="925:993" ph="..." />
+                <marker date="1571528438876" expanded="true" signature="1130:1136" ph="..." />
+                <marker date="1571528438876" expanded="true" signature="2177:2226" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/viewer.py">
+        <entry file="file://$PROJECT_DIR$/src/util_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="45" column="24" selection-start-line="45" selection-start-column="24" selection-end-line="45" selection-end-column="24" />
+            <state relative-caret-position="153">
+              <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
               <folding>
-                <marker date="1571519879571" expanded="true" signature="237:242" ph="..." />
-                <marker date="1571519879571" expanded="true" signature="527:532" ph="..." />
-                <marker date="1571519879571" expanded="true" signature="960:961" ph="..." />
+                <element signature="e#0#18#0" expanded="true" />
+                <marker date="1571531141047" expanded="true" signature="108:113" ph="..." />
+                <marker date="1571531141047" expanded="true" signature="295:390" ph="..." />
+                <marker date="1571531141047" expanded="true" signature="657:658" ph="..." />
+                <marker date="1571531141047" expanded="true" signature="1369:1398" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/renderer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+                <marker date="1571528132601" expanded="true" signature="109:110" ph="..." />
               </folding>
             </state>
           </provider>
@@ -132,23 +168,25 @@
         <option value="$PROJECT_DIR$/mod1_files/start.mod1" />
         <option value="$PROJECT_DIR$/src/Model.py" />
         <option value="$PROJECT_DIR$/resources/terrain_vertex_shader.py" />
-        <option value="$PROJECT_DIR$/resources/shaders/terrain_vertex.glsl" />
         <option value="$PROJECT_DIR$/resources/shaders/terrain_fragment.glsl" />
-        <option value="$PROJECT_DIR$/src/shader.py" />
         <option value="$PROJECT_DIR$/src/main.py" />
         <option value="$PROJECT_DIR$/src/map.py" />
         <option value="$PROJECT_DIR$/src/model.py" />
-        <option value="$PROJECT_DIR$/src/renderer.py" />
-        <option value="$PROJECT_DIR$/src/resource_functions.py" />
         <option value="$PROJECT_DIR$/src/sanitize.py" />
         <option value="$PROJECT_DIR$/src/terrain.py" />
+        <option value="$PROJECT_DIR$/src/resource_functions.py" />
+        <option value="$PROJECT_DIR$/src/renderer.py" />
         <option value="$PROJECT_DIR$/src/viewer.py" />
+        <option value="$PROJECT_DIR$/resources/mod1_files/start.mod1" />
+        <option value="$PROJECT_DIR$/resources/shaders/terrain_vertex.glsl" />
+        <option value="$PROJECT_DIR$/src/shader.py" />
+        <option value="$PROJECT_DIR$/src/util_functions.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="886" />
-    <option name="width" value="983" />
+    <option name="x" value="970" />
+    <option name="width" value="899" />
     <option name="height" value="1065" />
   </component>
   <component name="ProjectView">
@@ -173,6 +211,12 @@
               <item name="Mod1" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="mod1_files" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Mod1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Mod1" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="shaders" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Mod1" type="b2602c69:ProjectViewProjectNode" />
@@ -257,10 +301,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="886" y="0" width="983" height="1065" extended-state="0" />
+    <frame x="970" y="0" width="899" height="1065" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23597884" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25900117" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -302,37 +346,11 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/mod1_files/start.mod1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/terrain_vertex_shader.py" />
-    <entry file="file://$PROJECT_DIR$/resources/shaders/terrain_vertex.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/shaders/terrain_fragment.glsl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1571519347307" expanded="true" signature="54:56" ph="..." />
-            <marker date="1571519347307" expanded="true" signature="316:318" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -347,55 +365,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model.py">
+    <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
+        <state relative-caret-position="374">
+          <caret line="22" column="17" lean-forward="true" selection-start-line="18" selection-start-column="4" selection-end-line="28" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1571519541234" expanded="true" signature="89:94" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
-          <folding>
-            <marker date="1571519572244" expanded="true" signature="81:82" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resource_functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
-          <folding>
-            <marker date="1571519604343" expanded="true" signature="85:465" ph="..." />
-            <marker date="1571519604343" expanded="true" signature="492:497" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <marker date="1571519253852" expanded="true" signature="13:18" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sanitize.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="30" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="30" />
-          <folding>
-            <marker date="1571519624745" expanded="true" signature="66:67" ph="..." />
-            <marker date="1571519624745" expanded="true" signature="66:71" ph="..." />
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1571519347307" expanded="true" signature="54:56" ph="..." />
+            <marker date="1571519347307" expanded="true" signature="316:318" ph="..." />
           </folding>
         </state>
       </provider>
@@ -413,14 +390,103 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/resource_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1571524066762" expanded="true" signature="109:489" ph="..." />
+            <marker date="1571524066762" expanded="true" signature="516:521" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sanitize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="30" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="30" />
+          <folding>
+            <marker date="1571519624745" expanded="true" signature="66:67" ph="..." />
+            <marker date="1571519624745" expanded="true" signature="66:71" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/mod1_files/start.mod1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="587">
+          <caret line="46" column="33" selection-start-line="46" selection-start-column="33" selection-end-line="46" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <marker date="1571519541234" expanded="true" signature="89:94" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/viewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="45" column="24" selection-start-line="45" selection-start-column="24" selection-end-line="45" selection-end-column="24" />
+        <state relative-caret-position="210">
+          <caret line="33" column="18" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
           <folding>
-            <marker date="1571519879571" expanded="true" signature="237:242" ph="..." />
-            <marker date="1571519879571" expanded="true" signature="527:532" ph="..." />
-            <marker date="1571519879571" expanded="true" signature="960:961" ph="..." />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1571528226536" expanded="true" signature="251:256" ph="..." />
+            <marker date="1571528226536" expanded="true" signature="541:546" ph="..." />
+            <marker date="1571528226536" expanded="true" signature="1244:1245" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/shaders/terrain_vertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="34" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="25" column="60" selection-start-line="25" selection-start-column="60" selection-end-line="25" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <marker date="1571528438876" expanded="true" signature="96:101" ph="..." />
+            <marker date="1571528438876" expanded="true" signature="786:993" ph="..." />
+            <marker date="1571528438876" expanded="true" signature="925:993" ph="..." />
+            <marker date="1571528438876" expanded="true" signature="1130:1136" ph="..." />
+            <marker date="1571528438876" expanded="true" signature="2177:2226" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <marker date="1571528132601" expanded="true" signature="109:110" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/util_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <marker date="1571531141047" expanded="true" signature="108:113" ph="..." />
+            <marker date="1571531141047" expanded="true" signature="295:390" ph="..." />
+            <marker date="1571531141047" expanded="true" signature="657:658" ph="..." />
+            <marker date="1571531141047" expanded="true" signature="1369:1398" ph="..." />
           </folding>
         </state>
       </provider>

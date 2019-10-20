@@ -1,4 +1,5 @@
 import pygame
+from OpenGL.GL import *
 
 
 # Loads an image to the correct icon format
@@ -24,3 +25,26 @@ def load_image(image_name):
         print("Image loading failed : " + image_name)
         return None
     return image
+
+
+# Loads shader from file
+def load_shader(file_loc, shader_type):
+    if not file_loc.endswith('.glsl'):
+        print("Please choose a .glsl file")
+        return None
+    try:
+         with open(file_loc, "r") as glsl_file:
+            data = glsl_file.read()
+    except:
+        print("Please chose a valid .glsl file")
+        pygame.quit()
+        quit()
+    shader_id = glCreateShader(shader_type)
+    glShaderSource(shader_id, data)
+    glCompileShader(shader_id)
+    if glGetShaderiv(shader_id, GL_COMPILE_STATUS) == GL_FALSE:
+        print(glGetShaderInfoLog(shader_id, 500))
+        print("Could not compile shader : " + file_loc)
+        pygame.quit()
+        quit()
+    return shader_id
