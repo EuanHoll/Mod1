@@ -2,6 +2,7 @@ import map
 import terrain
 import resource_functions as rf
 import pygame
+import const as c
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -9,13 +10,14 @@ from OpenGL.GLU import *
 
 def viewer(map_data):
     pygame.init()
-    screen = pygame.display.set_mode((1280, 720), DOUBLEBUF|OPENGL)
+    screen = pygame.display.set_mode((c.S_WIDTH, c.S_HEIGHT), DOUBLEBUF|OPENGL)
     pygame.display.set_caption("Mod1")
     pygame.display.set_icon(rf.load_icon("icon.png"))
-    gluPerspective(60, (1280/720), 0.1, 1000)
+    gluPerspective(60, c.S_RATIO, 0.1, 1000)
     glTranslatef(-4, -4, -10)
     glRotatef(45, -90, 0, 0)
     glEnable(GL_DEPTH_TEST)
+    glClearColor(0.411, 0.451, 0.5412, 1)
     loop(screen, map_data)
 
 
