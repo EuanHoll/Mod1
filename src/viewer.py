@@ -38,5 +38,16 @@ def event_handling(event):
 def key_controls(event):
     if event.key == pygame.K_ESCAPE:
         return False
-    print(event.key)
+    if event.key == pygame.K_w:
+        glTranslatef(0, 0, 1)
+    if event.key == pygame.K_s:
+        glTranslatef(0, 0, -1)
+    if event.key == pygame.K_a:
+        glTranslatef(1, 0, 0)
+    if event.key == pygame.K_d:
+        glTranslatef(-1, 0, 0)
+    if event.key == pygame.K_z:
+        glTranslatef(0, -1, 0)
+    if event.key == pygame.K_x:
+        glTranslatef(0, 1, 0)
     return True

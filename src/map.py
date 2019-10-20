@@ -15,8 +15,16 @@ class Map_3d:
         self.height = height
 
     def draw_map(self):
-        glBegin(GL_LINES)
-        for edge in self.edges:
-            for vert in edge:
-                glVertex3fv(self.verts[vert])
+        glBegin(GL_QUADS)
+        y = 1
+        while y < self.height:
+            x = 0
+            while x < self.width - 1:
+                i = (y * self.width) + x
+                glVertex3fv(self.verts[i - self.width])
+                glVertex3fv(self.verts[i - self.width + 1])
+                glVertex3fv(self.verts[i + 1])
+                glVertex3fv(self.verts[i])
+                x += 1
+            y += 1
         glEnd()
