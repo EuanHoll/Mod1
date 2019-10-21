@@ -5,7 +5,7 @@ import time
 
 
 def get_time():
-    return int(round(time.time() * 1000))
+    return time.time()
 
 
 def draw_text(text, position):
@@ -37,3 +37,7 @@ def load_image(image_name):
         print("Image loading failed : " + image_name)
         return None
     return image
+
+
+def read_shader(filename):
+    return open("resources/shaders/" + filename, 'r').read()

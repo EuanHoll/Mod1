@@ -1,7 +1,11 @@
 import numpy as np
 import random
 from OpenGL.GL import *
-from OpenGL.GLU import *
+from OpenGL.arrays import vbo
+from OpenGL.GL import *
+from OpenGL.GL.shaders import *
+import resource_functions as rf
+from ctypes import *
 
 
 edge_table = [
@@ -350,61 +354,73 @@ class Voxel_Data:
             z += 1
         return info
 
-
 class Voxel:
     def __init__(self, voxel_data, max_width, max_height, max_depth):
         self.voxel_data = voxel_data
-        self.verts = create_verts_from_data(voxel_data, max_width, max_height, max_depth)
+        self.indices = []
+        self.verts = np.array(self.create_verts_from_data(voxel_data, max_width, max_height, max_depth), dtype='f')
+        self.indices = np.array(self.indices, dtype=np.int32)
+        self.vbo_ver = vbo.VBO(self.verts)
+        self.vbo_ind = vbo.VBO(self.indices)
+        self.shader = self.create_shader()
+
+    def create_shader(self):
+        ver = compileShader(rf.read_shader("cubes.ver"), GL_VERTEX_SHADER)
+        frag = compileShader(rf.read_shader("cubes.frag"), GL_FRAGMENT_SHADER)
+        shader = glCreateProgram()
+        glAttachShader(shader, ver)
+        glAttachShader(shader, frag)
+        glBindAttribLocation(shader, 0, "vPosition")
+        glLinkProgram(shader)
+        glValidateProgram(shader)
+        return shader
 
     def draw_mesh(self):
-        glBegin(GL_TRIANGLES)
-        glColor4f(0, 0, 1, 0.01)
+        glColor4fv((0, 0, 1, 0.2))
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
+        glDrawElementsus(GL_TRIANGLES, self.indices)
+
+
+    def create_verts_from_data(self, voxel_data, max_width, max_height, max_depth):
+        verts = []
+        z = 0
+        while z < voxel_data.height - 1:
+            y = 0
+            while y < voxel_data.depth - 1:
+                x = 0
+                while x < voxel_data.width - 1:
+                    self.calc_chunk(x, y, z, voxel_data, verts, (max_width, max_height, max_depth))
+                    x += 1
+                y += 1
+            z += 1
+        return verts
+
+
+    def calc_chunk(self, x, y, z, voxel_data, verts, maxes):
+        corners = get_corners(x, y, z, voxel_data, maxes)
+        cube_index = get_cube_index(corners, voxel_data.surface_level)
         i = 0
-        while i < len(self.verts):
-            glVertex3fv(self.verts[i])
-            glVertex3fv(self.verts[i + 1])
-            glVertex3fv(self.verts[i + 2])
+        while tri_table[cube_index][i] != -1:
+            a0 = index_a[tri_table[cube_index][i]]
+            b0 = index_b[tri_table[cube_index][i]]
+            a1 = index_a[tri_table[cube_index][i + 1]]
+            b1 = index_b[tri_table[cube_index][i + 1]]
+            a2 = index_a[tri_table[cube_index][i + 2]]
+            b2 = index_b[tri_table[cube_index][i + 2]]
+            i_0 = len(verts) / 3
+            verts.extend(interpolate(corners[a0], corners[b0], voxel_data.surface_level))
+            verts.extend(interpolate(corners[a1], corners[b1], voxel_data.surface_level))
+            verts.extend(interpolate(corners[a2], corners[b2], voxel_data.surface_level))
+            self.indices.extend([i_0, i_0 + 1, i_0 + 2])
             i += 3
-        glEnd()
-
-
-def create_verts_from_data(voxel_data, max_width, max_height, max_depth):
-    verts = []
-    z = 0
-    while z < voxel_data.height - 1:
-        y = 0
-        while y < voxel_data.depth - 1:
-            x = 0
-            while x < voxel_data.width - 1:
-                calc_chunk(x, y, z, voxel_data, verts, (max_width, max_height, max_depth))
-                x += 1
-            y += 1
-        z += 1
-    return verts
-
-
-def calc_chunk(x, y, z, voxel_data, verts, maxes):
-    corners = get_corners(x, y, z, voxel_data, maxes)
-    cube_index = get_cube_index(corners, voxel_data.surface_level)
-    i = 0
-    while tri_table[cube_index][i] != -1:
-        a0 = index_a[tri_table[cube_index][i]]
-        b0 = index_b[tri_table[cube_index][i]]
-        a1 = index_a[tri_table[cube_index][i + 1]]
-        b1 = index_b[tri_table[cube_index][i + 1]]
-        a2 = index_a[tri_table[cube_index][i + 2]]
-        b2 = index_b[tri_table[cube_index][i + 2]]
-        verts.append(interpolate(corners[a0], corners[b0], voxel_data.surface_level))
-        verts.append(interpolate(corners[a1], corners[b1], voxel_data.surface_level))
-        verts.append(interpolate(corners[a2], corners[b2], voxel_data.surface_level))
-        i += 3
 
 
 def interpolate(v1, v2, surface_level):
     t = (surface_level - v1[3]) / (v2[3] - v1[3])
-    ret = (v1[0] + t * (v2[0] - v1[0]),
+    ret = [v1[0] + t * (v2[0] - v1[0]),
            v1[1] + t * (v2[1] - v1[1]),
-           v1[2] + t * (v2[2] - v1[2]))
+           v1[2] + t * (v2[2] - v1[2])]
     return ret
 
 
