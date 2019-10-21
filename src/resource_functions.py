@@ -1,22 +1,14 @@
 import pygame
-from OpenGL.GL import *
-from OpenGL.GLUT import *
 import time
 
 
 def get_time():
+    """Wrapper for time"""
     return time.time()
 
 
-def draw_text(text, position):
-    font = pygame.font.Font(None, 64)
-    textSurface = font.render(text, True, (255, 255, 255, 255), (0, 0, 0, 255))
-    textData = pygame.image.tostring(textSurface, "RGBA", True)
-    glRasterPos2d(*position)
-    glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)
-
-
 def load_icon(icon_name):
+    """Load game icon"""
     image_loc = "resources/images/" + icon_name
     image = pygame.image.load(image_loc)
     if image is None:
@@ -31,6 +23,7 @@ def load_icon(icon_name):
 
 
 def load_image(image_name):
+    """Load image to surface"""
     image_loc = "resources/images/" + image_name
     image = pygame.image.load(image_loc)
     if image is None:
@@ -39,5 +32,7 @@ def load_image(image_name):
     return image
 
 
+
 def read_shader(filename):
+    """Load text from shader file"""
     return open("resources/shaders/" + filename, 'r').read()

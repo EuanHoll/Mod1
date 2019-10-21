@@ -15,6 +15,7 @@ def main():
 
 
 def get_file(file_loc):
+	"""Reads the map file and returns raw map data"""
 	if not file_loc.endswith('.mod1'):
 		print("Please choose a .mod1 file")
 		return None

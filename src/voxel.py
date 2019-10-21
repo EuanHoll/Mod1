@@ -5,7 +5,6 @@ from OpenGL.arrays import vbo
 from OpenGL.GL import *
 from OpenGL.GL.shaders import *
 import resource_functions as rf
-from ctypes import *
 
 
 edge_table = [
@@ -302,6 +301,7 @@ index_b = [1, 2, 3, 0, 5, 6, 7, 4, 4, 5, 6, 7]
 
 
 class Voxel_Data:
+    """Voxel data storage class"""
     def __init__(self, width, height, depth, surface_level, is_full):
         self.width = width
         self.height = height
@@ -355,6 +355,7 @@ class Voxel_Data:
         return info
 
 class Voxel:
+    """Voxel for rendering"""
     def __init__(self, voxel_data, max_width, max_height, max_depth):
         self.voxel_data = voxel_data
         self.indices = []
@@ -365,6 +366,7 @@ class Voxel:
         self.shader = self.create_shader()
 
     def create_shader(self):
+        """Creates a voxel compatible shader"""
         ver = compileShader(rf.read_shader("cubes.ver"), GL_VERTEX_SHADER)
         frag = compileShader(rf.read_shader("cubes.frag"), GL_FRAGMENT_SHADER)
         shader = glCreateProgram()
@@ -376,6 +378,7 @@ class Voxel:
         return shader
 
     def draw_mesh(self):
+        """Draws the data stored in the Voxel Data"""
         glColor4fv((0, 0, 1, 0.2))
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
@@ -383,6 +386,7 @@ class Voxel:
 
 
     def create_verts_from_data(self, voxel_data, max_width, max_height, max_depth):
+        """Creates the verts from raw voxel data"""
         verts = []
         z = 0
         while z < voxel_data.height - 1:
@@ -398,6 +402,7 @@ class Voxel:
 
 
     def calc_chunk(self, x, y, z, voxel_data, verts, maxes):
+        """Calculates the verts for a single trig"""
         corners = get_corners(x, y, z, voxel_data, maxes)
         cube_index = get_cube_index(corners, voxel_data.surface_level)
         i = 0
@@ -417,6 +422,7 @@ class Voxel:
 
 
 def interpolate(v1, v2, surface_level):
+    """Gets estimated position of vert"""
     t = (surface_level - v1[3]) / (v2[3] - v1[3])
     ret = [v1[0] + t * (v2[0] - v1[0]),
            v1[1] + t * (v2[1] - v1[1]),
@@ -425,6 +431,7 @@ def interpolate(v1, v2, surface_level):
 
 
 def get_cube_index(corners, surface_level):
+    """Gets all the 'on' corners"""
     cube_index = 0
     if corners[0][-1] < surface_level:
         cube_index |= 1
@@ -446,6 +453,7 @@ def get_cube_index(corners, surface_level):
 
 
 def get_corners(x, y, z, voxel_data, maxes):
+    """Gets the all the corners"""
     n_x = (x / voxel_data.width) * maxes[0]
     n_y = (y / voxel_data.depth) * maxes[2]
     n_z = (z / voxel_data.height) * maxes[1]

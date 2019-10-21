@@ -2,6 +2,7 @@ import map
 
 
 def sanitize (str_ar):
+    """Sanitizes the map file"""
     val = len(str_ar[0].split())
     map_data = map.Map(val, len(str_ar), [])
     for line in str_ar:

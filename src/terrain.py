@@ -2,6 +2,7 @@ import map
 
 
 def get_map_3d(map_data):
+    """Converts the raw terrain map into a verts"""
     verts = []
     y = 0
     while y < map_data.height + 2:
@@ -14,11 +15,11 @@ def get_map_3d(map_data):
                 verts.append((x, y, 0))
             x += 1
         y += 1
-    print_verts(verts, map_data.width + 2, map_data.height + 2)
     return map.Map_3d(verts, map_data.width + 2, map_data.height + 2)
 
 
 def print_verts(verts, width, height):
+    """Prints the raw terrain map"""
     i = 0
     while i < height:
         print(verts[i * width:(i + 1) * width])
