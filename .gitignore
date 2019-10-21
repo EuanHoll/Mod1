@@ -1,4 +1,7 @@
-
+*.pyc
 .vscode/
-
+vent/
+venv
 .idea/
+*.pyc
+*.pyc
