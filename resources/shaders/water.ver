@@ -1,0 +1,14 @@
+#version 120
+
+attribute vec4 vPosition;
+attribute vec4 vNormal;
+attribute vec4 vLightPos;
+
+varying vec3 colour;
+
+void main()
+{
+    float brightness = dot(normalize(vLightPos - vPosition), vNormal);
+    colour = vec3(brightness, brightness, brightness);
+    gl_Position = gl_ModelViewProjectionMatrix * vPosition;
+}

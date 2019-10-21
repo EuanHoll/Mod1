@@ -1,4 +1,5 @@
 import map
+import const as c
 
 
 def get_map_3d(map_data):
@@ -10,6 +11,9 @@ def get_map_3d(map_data):
         while x < map_data.width + 2:
             if 0 <= x - 1 < map_data.width and 0 <= y - 1 < map_data.height:
                 i = ((y - 1) * map_data.width) + x - 1
+                if int(map_data.array[i]) > c.MAX_HEIGHT - 1:
+                    print("The max height of the terrain is " + str(c.MAX_HEIGHT - 1))
+                    quit()
                 verts.append((x, y, int(map_data.array[i])))
             else:
                 verts.append((x, y, 0))

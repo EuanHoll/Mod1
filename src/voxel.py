@@ -313,6 +313,8 @@ class Voxel_Data:
             self.stored = self.create_full()
         elif is_full == 2:
             self.stored = self.create_level()
+        elif is_full == 3:
+            self.stored = []
         else:
             self.stored = self.create_random()
 
@@ -359,16 +361,18 @@ class Voxel:
     def __init__(self, voxel_data, max_width, max_height, max_depth):
         self.voxel_data = voxel_data
         self.indices = []
-        self.verts = np.array(self.create_verts_from_data(voxel_data, max_width, max_height, max_depth), dtype='f')
+        self.verts = np.array(self.create_verts_from_data(voxel_data, maxes), dtype='f')
         self.indices = np.array(self.indices, dtype=np.int32)
         self.vbo_ver = vbo.VBO(self.verts)
         self.vbo_ind = vbo.VBO(self.indices)
-        self.shader = self.create_shader()
+        self.shader = None
+        if vert_sha != None and frag_sha != None:
+            self.shader = self.create_shader(vert_sha, frag_sha)
 
-    def create_shader(self):
+    def create_shader(self, vert_sha, frag_sha):
         """Creates a voxel compatible shader"""
-        ver = compileShader(rf.read_shader("cubes.ver"), GL_VERTEX_SHADER)
-        frag = compileShader(rf.read_shader("cubes.frag"), GL_FRAGMENT_SHADER)
+        ver = compileShader(rf.read_shader(vert_sha), GL_VERTEX_SHADER)
+        frag = compileShader(rf.read_shader(frag_sha), GL_FRAGMENT_SHADER)
         shader = glCreateProgram()
         glAttachShader(shader, ver)
         glAttachShader(shader, frag)
@@ -377,7 +381,17 @@ class Voxel:
         glValidateProgram(shader)
         return shader
 
-    def draw_mesh(self):
+    def draw_mesh_shader(self):
+        if self.shader == None:
+            print("You have no shader")
+            quit()
+        glUseProgram(self.shader)
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
+        glDrawElementsus(GL_TRIANGLES, self.indices)
+        glUseProgram(0)
+
+    def draw_mesh_no_shader(self):
         """Draws the data stored in the Voxel Data"""
         glColor4fv((0, 0, 1, 0.2))
         glEnableVertexAttribArray(0)
@@ -385,7 +399,7 @@ class Voxel:
         glDrawElementsus(GL_TRIANGLES, self.indices)
 
 
-    def create_verts_from_data(self, voxel_data, max_width, max_height, max_depth):
+    def create_verts_from_data(self, voxel_data, maxes):
         """Creates the verts from raw voxel data"""
         verts = []
         z = 0
@@ -394,7 +408,7 @@ class Voxel:
             while y < voxel_data.depth - 1:
                 x = 0
                 while x < voxel_data.width - 1:
-                    self.calc_chunk(x, y, z, voxel_data, verts, (max_width, max_height, max_depth))
+                    self.calc_chunk(x, y, z, voxel_data, verts, maxes)
                     x += 1
                 y += 1
             z += 1

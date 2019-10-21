@@ -18,6 +18,7 @@ def viewer(map_data):
     map_3d = terrain.get_map_3d(map_data)
     glTranslate(-(map_3d.width / 2), -(map_3d.height / 2), -10)
     glRotatef(45, -90, 0, 0)
+    glEnable(GL_LIGHT0)
     glEnable(GL_DEPTH_TEST)
     glClearColor(0.411, 0.451, 0.5412, 1)
     loop(screen, map_3d)
@@ -26,7 +27,7 @@ def viewer(map_data):
 def loop(screen, map_3d):
     """The main game loop"""
     running = True
-    water = vx.Voxel(vx.Voxel_Data(map_3d.width * 10, 10, map_3d.height * 10, 0.6, 2), map_3d.width, 10, map_3d.height)
+    water = vx.Voxel(vx.Voxel_Data(map_3d.width * 10, 10, map_3d.height * 10, 0.6, 2), (map_3d.width, c.MAX_HEIGHT, map_3d.height), "water.ver", "water.frag")
     start_time = rf.get_time()
     fps = 0
     counter = 0
@@ -35,7 +36,7 @@ def loop(screen, map_3d):
             running = event_handling(event)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         map_3d.draw_map()
-        water.draw_mesh()
+        water.draw_mesh_shader()
         time = rf.get_time() - start_time
         if time > 1:
             fps = counter / time

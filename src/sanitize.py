@@ -1,4 +1,5 @@
 import map
+import const
 
 
 def sanitize (str_ar):
@@ -16,6 +17,6 @@ def sanitize (str_ar):
         return None
     for val in map_data.array:
         if not val.isdigit():
-            print("The file can only contain integers")
+            print("The file can only contain positive integers")
             return None
     return map_data
