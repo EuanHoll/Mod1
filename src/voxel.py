@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from OpenGL.GL import *
+import const as c
 from OpenGL.arrays import vbo
 from OpenGL.GL import *
 from OpenGL.GL.shaders import *
@@ -358,7 +358,7 @@ class Voxel_Data:
 
 class Voxel:
     """Voxel for rendering"""
-    def __init__(self, voxel_data, max_width, max_height, max_depth):
+    def __init__(self, voxel_data, maxes, vert_sha, frag_sha):
         self.voxel_data = voxel_data
         self.indices = []
         self.verts = np.array(self.create_verts_from_data(voxel_data, maxes), dtype='f')
@@ -366,6 +366,7 @@ class Voxel:
         self.vbo_ver = vbo.VBO(self.verts)
         self.vbo_ind = vbo.VBO(self.indices)
         self.shader = None
+        self.maxes = maxes
         if vert_sha != None and frag_sha != None:
             self.shader = self.create_shader(vert_sha, frag_sha)
 
@@ -377,6 +378,8 @@ class Voxel:
         glAttachShader(shader, ver)
         glAttachShader(shader, frag)
         glBindAttribLocation(shader, 0, "vPosition")
+        glBindAttribLocation(shader, 0, "vNormal")
+        glBindAttribLocation(shader, 0, "vLightPos")
         glLinkProgram(shader)
         glValidateProgram(shader)
         return shader
@@ -388,6 +391,8 @@ class Voxel:
         glUseProgram(self.shader)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, [self.maxes[0] / 2, c.MAX_HEIGHT * 2, self.maxes[2] / 2])
         glDrawElementsus(GL_TRIANGLES, self.indices)
         glUseProgram(0)
 
