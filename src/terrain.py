@@ -6,7 +6,7 @@ import numpy as np
 
 def get_terrain(map_data):
     vd = get_voxel_data(map_data)
-    v = vx.Voxel(vd, (vd.width, vd.height, vd.depth), "terrain.ver", "terrain.frag")
+    v = vx.Voxel(vd, "terrain.ver", "terrain.frag")
     return v
 
 

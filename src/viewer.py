@@ -18,7 +18,7 @@ def viewer(map_data):
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, c.S_RATIO, 0.1, 1000)
     ter = terrain.get_terrain(map_data)
-    glTranslate(-(ter.maxes[0] / 2), -ter.maxes[2] / 3, -ter.maxes[1] * 2)
+    glTranslate(-(ter.voxel_data.width / 2), -ter.voxel_data.height, -ter.voxel_data.depth)
     glRotatef(45, -90, 0, 0)
     glEnable(GL_LIGHT0)
     glEnable(GL_DEPTH_TEST)
@@ -31,16 +31,16 @@ def viewer(map_data):
 def loop(screen, ter):
     """The main game loop"""
     running = True
-    water = vx.Voxel(vx.Voxel_Data(ter.voxel_data.width, c.MAX_HEIGHT, ter.voxel_data.depth, 0.6, 2), (ter.voxel_data.width, c.MAX_HEIGHT, ter.voxel_data.depth), "water.ver", "water.frag")
+    water = vx.Voxel(vx.Voxel_Data(ter.voxel_data.width, c.MAX_HEIGHT, ter.voxel_data.depth, 0.6, 0), "water.ver", "water.frag")
     start_time = rf.get_time()
     fps = 0
     counter = 0
     while running:
         for event in pygame.event.get():
-            running = event_handling(event, water)
+            running = event_handling(event, water, ter)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         ter.draw_mesh_shader()
-        ##handle_water(water)
+        #handle_water(water, ter)
         water.draw_mesh_shader()
         time = rf.get_time() - start_time
         if time > 1:
@@ -54,36 +54,35 @@ def loop(screen, ter):
     quit()
 
 
-def handle_water(voxel):
-    voxel.voxel_data = wp.apply_physics(voxel.voxel_data)
-    if not voxel.voxel_data.redraw:
-        voxel.redraw()
+def handle_water(voxel, ter):
+    voxel.voxel_data = wp.apply_physics(voxel.voxel_data, ter)
 
 
-def event_handling(event, water):
+def event_handling(event, water, ter):
     """Pygame event handling"""
     if event.type == pygame.QUIT:
         return False
     if event.type == pygame.KEYDOWN:
-        return key_controls(event, water)
+        return key_controls(event, water, ter)
     return True
 
 
-def key_controls(event, water):
+def key_controls(event, water, ter):
     """Key event handling"""
     if event.key == pygame.K_ESCAPE:
         return False
-    if event.key == pygame.K_LEFT:
-        water.light_pos[0] -= 1
-    if event.key == pygame.K_RIGHT:
-        water.light_pos[0] += 1
-    if event.key == pygame.K_DOWN:
-        water.light_pos[2] -= 1
-    if event.key == pygame.K_UP:
-        water.light_pos[2] += 1
-    if event.key == pygame.K_z:
-        water.light_pos[1] += 1
-    if event.key == pygame.K_x:
-        water.light_pos[1] -= 1
-    print(water.light_pos)
+    if event.key == pygame.K_1:
+        wp.wall(water.voxel_data, ter.voxel_data.stored)
+    if event.key == pygame.K_0:
+        water.voxel_data.stored = water.voxel_data.create_empty()
+        water.voxel_data.redraw = True
+    if event.key == pygame.K_9:
+        water.voxel_data.stored = water.voxel_data.create_full()
+        water.voxel_data.redraw = True
+    if event.key == pygame.K_8:
+        water.voxel_data.stored = water.voxel_data.create_level()
+        water.voxel_data.redraw = True
+    if event.key == pygame.K_7:
+        water.voxel_data.stored = water.voxel_data.create_random()
+        water.voxel_data.redraw = True
     return True

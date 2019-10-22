@@ -321,6 +321,7 @@ class Voxel_Data:
 
     def create_empty(self):
         info = np.zeros((self.width, self.height, self.depth))
+        print(self.height)
         return info
 
     def create_full(self):
@@ -329,14 +330,14 @@ class Voxel_Data:
         return info
 
     def create_random(self):
-        info = np.empty((self.width, self.height, self.depth))
+        info = np.zeros((self.width, self.height, self.depth))
         z = 0
         while z < self.height - 1:
             y = 0
             while y < self.depth - 1:
                 x = 0
                 while x < self.width - 1:
-                    info[x][y][z] = random.uniform(0, 1)
+                    info[x][z][y] = random.uniform(0, 1)
                     x += 1
                 y += 1
             z += 1
@@ -359,25 +360,19 @@ class Voxel_Data:
 
 class Voxel:
     """Voxel for rendering"""
-    def __init__(self, voxel_data, maxes, vert_sha, frag_sha):
+    def __init__(self, voxel_data, vert_sha, frag_sha):
         self.voxel_data = voxel_data
         self.indices = []
-        self.verts = np.array(self.create_verts_from_data(voxel_data, maxes), dtype='f')
+        self.verts = np.array(self.create_verts_from_data(voxel_data), dtype='f')
         self.indices = np.array(self.indices, dtype=np.int32)
         self.vbo_ver = vbo.VBO(self.verts)
         self.vbo_ind = vbo.VBO(self.indices)
         self.shader = None
-        self.maxes = maxes
-        #self.norms = np.array(self.calc_norms(), dtype='f')
-        self.light_pos = [self.maxes[0], c.MAX_HEIGHT, self.maxes[2], 1]
+        self.norms = np.array(self.calc_norms(), dtype='f')
+        self.light_pos = [10, c.MAX_HEIGHT, 10, 1]
         self.voxel_data.redraw = False
         if vert_sha != None and frag_sha != None:
             self.shader = self.create_shader(vert_sha, frag_sha)
-
-    def redraw(self):
-        self.verts = np.array(self.create_verts_from_data(self.voxel_data, self.maxes), dtype='f')
-        self.indices = np.array(self.indices, dtype=np.int32)
-        self.voxel_data.redraw = False
 
     def create_shader(self, vert_sha, frag_sha):
         """Creates a voxel compatible shader"""
@@ -396,13 +391,15 @@ class Voxel:
 
     def draw_mesh_shader(self):
         """Draws the data stored in the voxel_data with a shader"""
+        if self.voxel_data.redraw:
+            self.redraw()
         if self.shader == None:
             print("You have no shader")
             quit()
         glUseProgram(self.shader)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, self.norms)
         glVertexAttrib4fv(2, self.light_pos)
         glVertexAttrib1f(3, c.MAX_HEIGHT)
         glDrawElementsus(GL_TRIANGLES, self.indices)
@@ -410,12 +407,14 @@ class Voxel:
 
     def draw_mesh_no_shader(self, colour):
         """Draws the data stored in the Voxel Data without a shader"""
+        if self.voxel_data.redraw:
+            self.redraw()
         glColor4fv(colour)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
         glDrawElementsus(GL_TRIANGLES, self.indices)
 
-    def create_verts_from_data(self, voxel_data, maxes):
+    def create_verts_from_data(self, voxel_data):
         """Creates the verts from raw voxel data"""
         verts = []
         z = 0
@@ -424,15 +423,15 @@ class Voxel:
             while y < voxel_data.depth - 1:
                 x = 0
                 while x < voxel_data.width - 1:
-                    self.calc_chunk(x, y, z, voxel_data, verts, maxes)
+                    self.calc_chunk(x, y, z, voxel_data, verts)
                     x += 1
                 y += 1
             z += 1
         return verts
 
-    def calc_chunk(self, x, y, z, voxel_data, verts, maxes):
+    def calc_chunk(self, x, y, z, voxel_data, verts):
         """Calculates the verts for a single trig"""
-        corners = get_corners(x, y, z, voxel_data, maxes)
+        corners = get_corners(x, y, z, voxel_data)
         cube_index = get_cube_index(corners, voxel_data.surface_level)
         i = 0
         while tri_table[cube_index][i] != -1:
@@ -448,6 +447,13 @@ class Voxel:
             verts.extend(interpolate(corners[a2], corners[b2], voxel_data.surface_level))
             self.indices.extend([i_0, i_0 + 1, i_0 + 2])
             i += 3
+
+    def redraw(self):
+        self.indices = []
+        self.verts = np.array(self.create_verts_from_data(self.voxel_data), dtype='f')
+        self.indices = np.array(self.indices, dtype=np.int32)
+        self.voxel_data.redraw = False
+        print("ReDrawn")
 
     def calc_norms(self):
         norms = []
@@ -497,32 +503,15 @@ def get_cube_index(corners, surface_level):
     return cube_index
 
 
-def get_corners(x, y, z, voxel_data, maxes):
+def get_corners(x, y, z, voxel_data):
     """Gets the all the corners"""
-    if voxel_data.width != maxes[0]:
-        n_x = (x / voxel_data.width) * maxes[0]
-        n_x_o = 1 / maxes[0]
-    else:
-        n_x = x
-        n_x_o = 1
-    if voxel_data.height != maxes[1]:
-        n_z = (z / voxel_data.height) * maxes[1]
-        n_z_o = 1 / maxes[2]
-    else:
-        n_z = z
-        n_z_o = 1
-    if voxel_data.width != maxes[2]:
-        n_y = (y / voxel_data.depth) * maxes[2]
-        n_y_o = 1 / maxes[1]
-    else:
-        n_y = y
-        n_y_o = 1
-    return [(n_x, n_y, n_z, voxel_data.stored[x][z][y]),
-            (n_x + n_x_o, n_y, n_z, voxel_data.stored[x + 1][z][y]),
-            (n_x + n_x_o, n_y, n_z + n_z_o, voxel_data.stored[x + 1][z + 1][y]),
-            (n_x, n_y, n_z + n_z_o, voxel_data.stored[x][z + 1][y]),
-            (n_x, n_y + n_y_o, n_z, voxel_data.stored[x][z][y + 1]),
-            (n_x + n_x_o, n_y + n_y_o, n_z, voxel_data.stored[x + 1][z][y + 1]),
-            (n_x + n_x_o, n_y + n_y_o, n_z + n_z_o, voxel_data.stored[x + 1][z + 1][y + 1]),
-            (n_x, n_y + n_y_o, n_z + n_z_o, voxel_data.stored[x][z + 1][y + 1])]
+
+    return [(x, y, z, voxel_data.stored[x][z][y]),
+            (x + 1, y, z, voxel_data.stored[x + 1][z][y]),
+            (x + 1, y, z + 1, voxel_data.stored[x + 1][z + 1][y]),
+            (x, y, z + 1, voxel_data.stored[x][z + 1][y]),
+            (x, y + 1, z, voxel_data.stored[x][z][y + 1]),
+            (x + 1, y + 1, z, voxel_data.stored[x + 1][z][y + 1]),
+            (x + 1, y + 1, z + 1, voxel_data.stored[x + 1][z + 1][y + 1]),
+            (x, y + 1, z + 1, voxel_data.stored[x][z + 1][y + 1])]
 
