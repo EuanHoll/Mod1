@@ -356,7 +356,7 @@ class Voxel_Data:
         info = np.empty((self.width, self.height, self.depth))
         info.fill(0)
         z = 1
-        while z < 2:
+        while z < self.height / 2:
             y = 1
             while y < self.depth - 1:
                 x = 1
