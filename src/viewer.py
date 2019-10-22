@@ -4,7 +4,6 @@ import resource_functions as rf
 import pygame
 import const as c
 import water_physics as wp
-import numpy as np
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
