@@ -1,4 +1,10 @@
-
+*.pyc
 .vscode/
-
+vent/
+venv
 .idea/
+*.pyc
+*.pyc
+.idea/workspace.xml
+.idea/workspace.xml
+*.pyc

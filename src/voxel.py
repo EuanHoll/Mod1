@@ -307,6 +307,7 @@ class Voxel_Data:
         self.height = height
         self.depth = depth
         self.surface_level = surface_level
+        self.redraw = True
         if is_full == 0:
             self.stored = self.create_empty()
         elif is_full == 1:
@@ -367,8 +368,14 @@ class Voxel:
         self.vbo_ind = vbo.VBO(self.indices)
         self.shader = None
         self.maxes = maxes
+        self.voxel_data.redraw = False
         if vert_sha != None and frag_sha != None:
             self.shader = self.create_shader(vert_sha, frag_sha)
+
+    def redraw(self):
+        self.verts = np.array(self.create_verts_from_data(self.voxel_data, self.maxes), dtype='f')
+        self.indices = np.array(self.indices, dtype=np.int32)
+        self.voxel_data.redraw = False
 
     def create_shader(self, vert_sha, frag_sha):
         """Creates a voxel compatible shader"""
@@ -378,8 +385,9 @@ class Voxel:
         glAttachShader(shader, ver)
         glAttachShader(shader, frag)
         glBindAttribLocation(shader, 0, "vPosition")
-        glBindAttribLocation(shader, 0, "vNormal")
-        glBindAttribLocation(shader, 0, "vLightPos")
+        glBindAttribLocation(shader, 1, "vNormal")
+        glBindAttribLocation(shader, 2, "vLightPos")
+        glBindAttribLocation(shader, 3, "vMaxHeight")
         glLinkProgram(shader)
         glValidateProgram(shader)
         return shader
@@ -391,8 +399,9 @@ class Voxel:
         glUseProgram(self.shader)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, [self.maxes[0] / 2, c.MAX_HEIGHT * 2, self.maxes[2] / 2])
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
+        glVertexAttrib4fv(2, (self.maxes[0] * 2, 0, 0, 2))
+        glVertexAttrib1f(3, c.MAX_HEIGHT)
         glDrawElementsus(GL_TRIANGLES, self.indices)
         glUseProgram(0)
 

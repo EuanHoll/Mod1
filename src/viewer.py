@@ -3,6 +3,7 @@ import terrain
 import resource_functions as rf
 import pygame
 import const as c
+import water_physics as wp
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -36,6 +37,7 @@ def loop(screen, map_3d):
             running = event_handling(event)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         map_3d.draw_map()
+        handle_water(water)
         water.draw_mesh_shader()
         time = rf.get_time() - start_time
         if time > 1:
@@ -47,6 +49,12 @@ def loop(screen, map_3d):
         counter += 1
     pygame.quit()
     quit()
+
+
+def handle_water(voxel):
+    voxel.voxel_data = wp.apply_physics(voxel.voxel_data)
+    if not voxel.voxel_data.redraw:
+        voxel.redraw()
 
 
 def event_handling(event):
