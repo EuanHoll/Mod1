@@ -35,7 +35,7 @@ def loop(screen, map_data):
     """The main game loop"""
     running = True
     ter = terrain.get_terrain(map_data)
-    water = vx.Voxel(vx.Voxel_Data(22, c.MAX_HEIGHT + 2, 22, 0.3, 1), "water.ver", "water.frag")
+    water = vx.Voxel(vx.Voxel_Data(22, c.MAX_HEIGHT + 2, 22, 0.3, 2), "water.ver", "water.frag")
     wp.clear_under_terrain(water.voxel_data, ter.voxel_data.stored)
     ws = c.WaterSim()
     start_time = rf.get_time()
