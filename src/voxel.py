@@ -314,6 +314,7 @@ class Voxel_Data:
             self.stored = self.create_full()
         elif is_full == 2:
             self.stored = self.create_level()
+
         elif is_full == 3:
             self.stored = []
         else:
@@ -438,7 +439,6 @@ class Voxel:
     def redraw(self):
         self.verts = np.array(self.create_verts_from_data(self.voxel_data), dtype='f')
         self.voxel_data.redraw = False
-        print("ReDrawn")
 
     def calc_norms(self):
         norms = []

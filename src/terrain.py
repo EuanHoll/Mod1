@@ -54,8 +54,7 @@ def get_map_3d(map_data):
         y += 1
     verts = expand_map(verts, (map_data.width + 2, map_data.height + 2), (20, 20))
     smooth_verts(verts, 20, 20)
-    print_verts(verts, 20, 20)
-    return map.Map_3d(verts, 20,20)
+    return map.Map3d(verts, 20,20)
 
 
 def expand_map(verts, now, expanded):

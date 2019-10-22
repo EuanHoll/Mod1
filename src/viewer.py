@@ -10,6 +10,11 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 
+raining = False
+constant_wave = False
+rising = False
+
+
 def viewer(map_data):
     """The window display initialization"""
     pygame.init()
@@ -30,17 +35,19 @@ def viewer(map_data):
 def loop(screen, map_data):
     """The main game loop"""
     running = True
-    water = vx.Voxel(vx.Voxel_Data(22, c.MAX_HEIGHT + 2, 22, 0.3, 1), "water.ver", "water.frag")
     ter = terrain.get_terrain(map_data)
+    water = vx.Voxel(vx.Voxel_Data(22, c.MAX_HEIGHT + 2, 22, 0.3, 1), "water.ver", "water.frag")
+    wp.clear_under_terrain(water.voxel_data, ter.voxel_data.stored)
+    ws = c.WaterSim()
     start_time = rf.get_time()
     counter = 0
     while running:
         for event in pygame.event.get():
-            running = event_handling(event, water, ter)
+            running = event_handling(event, water, ter, ws)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        ter.draw_mesh_shader()
-        #handle_water(water, ter)
+        handle_water(water, ter, ws)
         water.draw_mesh_shader()
+        ter.draw_mesh_shader()
         time = rf.get_time() - start_time
         if time > 1:
             fps = counter / time
@@ -53,35 +60,47 @@ def loop(screen, map_data):
     quit()
 
 
-def handle_water(voxel, ter):
-    voxel.voxel_data = wp.apply_physics(voxel.voxel_data, ter)
+def handle_water(voxel, ter, ws):
+    voxel.voxel_data = wp.apply_physics(voxel.voxel_data, ter, ws)
 
 
-def event_handling(event, water, ter):
+def event_handling(event, water, ter, ws):
     """Pygame event handling"""
     if event.type == pygame.QUIT:
         return False
     if event.type == pygame.KEYDOWN:
-        return key_controls(event, water, ter)
+        return key_controls(event, water, ter, ws)
     return True
 
 
-def key_controls(event, water, ter):
+def key_controls(event, water, ter, ws):
     """Key event handling"""
     if event.key == pygame.K_ESCAPE:
         return False
     if event.key == pygame.K_1:
         wp.wall(water.voxel_data, ter.voxel_data.stored)
+        wp.clear_under_terrain(water.voxel_data, ter.voxel_data.stored)
     if event.key == pygame.K_0:
         water.voxel_data.stored = water.voxel_data.create_empty()
         water.voxel_data.redraw = True
     if event.key == pygame.K_9:
         water.voxel_data.stored = water.voxel_data.create_full()
+        wp.clear_under_terrain(water.voxel_data, ter.voxel_data.stored)
         water.voxel_data.redraw = True
     if event.key == pygame.K_8:
         water.voxel_data.stored = water.voxel_data.create_level()
+        wp.clear_under_terrain(water.voxel_data, ter.voxel_data.stored)
         water.voxel_data.redraw = True
     if event.key == pygame.K_7:
         water.voxel_data.stored = water.voxel_data.create_random()
+        wp.clear_under_terrain(water.voxel_data, ter.voxel_data.stored)
         water.voxel_data.redraw = True
+    if event.key == pygame.K_2:
+        ws.const_wave = not ws.const_wave
+    if event.key == pygame.K_3:
+        ws.rising = not ws.rising
+    if event.key == pygame.K_4:
+        ws.raining = not ws.raining
+
+
     return True

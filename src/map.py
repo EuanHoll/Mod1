@@ -11,7 +11,7 @@ class Map:
         self.array = array
 
 
-class Map_3d:
+class Map3d:
     """3D map class for 3d storage and rendering"""
     def __init__(self, verts, width, height):
         self.verts = verts
