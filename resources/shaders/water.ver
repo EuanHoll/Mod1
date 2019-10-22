@@ -5,15 +5,12 @@ attribute vec4 vNormal;
 attribute vec4 vLightPos;
 attribute float vMaxHeight;
 
-varying vec3 colour;
 varying vec3 gradient;
 
 void main()
 {
-    float brightness = dot(normalize(vLightPos - vPosition), vNormal);
-    colour = vec3(brightness, brightness, brightness);
     vec3 val_1 = vec3(0.03529f,0.03529f,0.474509f);
     vec3 val_2 = vec3(0,0.83137f,1);
-    gradient = mix(val_1, val_2, vPosition.y / vMaxHeight);
+    gradient = mix(val_1, val_2, vPosition.z / vMaxHeight);
     gl_Position = gl_ModelViewProjectionMatrix * vPosition;
 }
