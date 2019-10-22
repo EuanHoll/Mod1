@@ -2,10 +2,10 @@ import numpy as np
 
 
 def wall(voxel_data, terrain):
-    z = 0
+    z = 1
     sze = int(voxel_data.depth / 2)
     while z < voxel_data.height - 1:
-        y = 0
+        y = 1
         while y < sze:
             x = 1
             while x < voxel_data.width - 1:
@@ -20,19 +20,19 @@ def wall(voxel_data, terrain):
 def apply_physics(voxel_data, terrain):
     stored = np.copy(voxel_data.stored)
     physics(voxel_data, terrain.voxel_data)
-    if should_redraw(stored, voxel_data.stored, voxel_data.width, voxel_data.height, voxel_data.depth):
-        voxel_data.redraw = True
-        print("Here")
+    #if should_redraw(stored, voxel_data.stored, voxel_data.width, voxel_data.height, voxel_data.depth):
+    voxel_data.redraw = True
+        #print("Here")
     return voxel_data
 
 
 def should_redraw(pre, new, width, height, depth):
-    z = 0
-    while z < height:
-        y = 0
-        while y < depth:
-            x = 0
-            while x < width:
+    z = 1
+    while z < height - 1:
+        y = 1
+        while y < depth - 1:
+            x = 1
+            while x < width - 1:
                 if pre[x][z][y] != new[x][z][y]:
                     return True
                 x += 1
@@ -42,14 +42,14 @@ def should_redraw(pre, new, width, height, depth):
 
 
 def physics(voxel_data, terrain):
-    z = 0
-    while z < voxel_data.height:
-        y = 0
-        while y < voxel_data.depth:
-            x = 0
-            while x < voxel_data.width:
+    z = 1
+    while z < voxel_data.height - 1:
+        y = 1
+        while y < voxel_data.depth - 1:
+            x = 1
+            while x < voxel_data.width - 1:
                 val = voxel_data.stored[x][z][y]
-                if z > 0 and val != -1:
+                if z > 1 and val != -1:
                     val_1 = voxel_data.stored[x][z - 1][y]
                     if terrain.stored[x][z - 1][y] != 1 and val_1 >= 0:
                         if val_1 < 1:

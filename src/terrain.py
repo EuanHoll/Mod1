@@ -13,27 +13,27 @@ def get_terrain(map_data):
 
 def get_voxel_data(map_data):
     map3d = get_map_3d(map_data)
-    vd = vx.Voxel_Data(map3d.width, c.MAX_HEIGHT, map3d.height, 0.4, 3)
+    vd = vx.Voxel_Data(int(map3d.width + 2), int(c.MAX_HEIGHT + 2), int(map3d.height + 2), 0.4, 0)
     vd.stored = get_voxel_map(map3d, vd)
     return vd
 
 
 def get_voxel_map(map_data, vd):
     stored = np.empty((vd.width, vd.height, vd.depth))
-    z = 0
-    while z < vd.height:
-        y = 0
-        while y < vd.depth:
-            x = 0
-            while x < vd.width:
-                if z >= map_data.verts[(y * vd.width) + x][2]:
+    stored.fill(0)
+    z = 1
+    while z < vd.height - 1:
+        y = 1
+        while y < vd.depth - 1:
+            x = 1
+            while x < vd.width - 1:
+                if z < map_data.verts[((y - 1) * (vd.width - 2)) + x - 1][2] * 10:
                     stored[x][z][y] = 1
-                else:
-                    stored[x][z][y] = 0
                 x += 1
             y += 1
         z += 1
     return stored
+
 
 def get_map_3d(map_data):
     """Converts the raw terrain map into a verts"""
@@ -52,9 +52,10 @@ def get_map_3d(map_data):
                 verts.append([x, y, 0])
             x += 1
         y += 1
-    verts = expand_map(verts, (map_data.width + 2, map_data.height + 2), ((map_data.width + 2) * 10, (map_data.height + 2) * 10))
-    smooth_verts(verts, (map_data.width + 2) * 10, (map_data.height + 2) * 10)
-    return map.Map_3d(verts, (map_data.width + 2) * 10, (map_data.height + 2) * 10)
+    verts = expand_map(verts, (map_data.width + 2, map_data.height + 2), (20, 20))
+    smooth_verts(verts, 20, 20)
+    print_verts(verts, 20, 20)
+    return map.Map_3d(verts, 20,20)
 
 
 def expand_map(verts, now, expanded):
@@ -63,7 +64,7 @@ def expand_map(verts, now, expanded):
     while y < expanded[1]:
         x = 0
         while x < expanded[0]:
-            z = get_from_map((int(x // 10), int(y / 10)), (x % 10) / 10, now[0], verts)
+            z = get_from_map((int((x / expanded[0]) * now[0]), int((y / expanded[1]) * now[1])), 1, now[0], verts)
             ver.append(([x, y, z]))
             x += 1
         y += 1
@@ -74,7 +75,7 @@ def get_from_map(pos, percent, width, verts):
     if pos[0] + 1 < width:
         z_0 = verts[(pos[1] * width) + pos[0]][2]
         z_1 = verts[(pos[1] * width) + pos[0] + 1][2]
-        return ((z_0 - z_1) * percent) + z_0
+        return z_0
     return verts[(pos[1] * width) + pos[0]][2]
 
 

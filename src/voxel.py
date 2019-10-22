@@ -321,21 +321,30 @@ class Voxel_Data:
 
     def create_empty(self):
         info = np.zeros((self.width, self.height, self.depth))
-        print(self.height)
         return info
 
     def create_full(self):
         info = np.empty((self.width, self.height, self.depth))
-        info.fill(1)
+        info.fill(0)
+        z = 1
+        while z < self.height - 1:
+            y = 1
+            while y < self.depth - 1:
+                x = 1
+                while x < self.width - 1:
+                    info[x][z][y] = self.surface_level + 0.1
+                    x += 1
+                y += 1
+            z += 1
         return info
 
     def create_random(self):
         info = np.zeros((self.width, self.height, self.depth))
-        z = 0
+        z = 1
         while z < self.height - 1:
-            y = 0
+            y = 1
             while y < self.depth - 1:
-                x = 0
+                x = 1
                 while x < self.width - 1:
                     info[x][z][y] = random.uniform(0, 1)
                     x += 1
@@ -346,12 +355,12 @@ class Voxel_Data:
     def create_level(self):
         info = np.empty((self.width, self.height, self.depth))
         info.fill(0)
-        z = 0
+        z = 1
         while z < 2:
-            y = 0
-            while y < self.depth:
-                x = 0
-                while x < self.width:
+            y = 1
+            while y < self.depth - 1:
+                x = 1
+                while x < self.width - 1:
                     info[x][z][y] = self.surface_level + 0.1
                     x += 1
                 y += 1
@@ -362,11 +371,8 @@ class Voxel:
     """Voxel for rendering"""
     def __init__(self, voxel_data, vert_sha, frag_sha):
         self.voxel_data = voxel_data
-        self.indices = []
         self.verts = np.array(self.create_verts_from_data(voxel_data), dtype='f')
-        self.indices = np.array(self.indices, dtype=np.int32)
         self.vbo_ver = vbo.VBO(self.verts)
-        self.vbo_ind = vbo.VBO(self.indices)
         self.shader = None
         self.norms = np.array(self.calc_norms(), dtype='f')
         self.light_pos = [10, c.MAX_HEIGHT, 10, 1]
@@ -402,7 +408,7 @@ class Voxel:
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, self.norms)
         glVertexAttrib4fv(2, self.light_pos)
         glVertexAttrib1f(3, c.MAX_HEIGHT)
-        glDrawElementsus(GL_TRIANGLES, self.indices)
+        glDrawArrays(GL_TRIANGLES, 0, len(self.verts) // 3)
         glUseProgram(0)
 
     def draw_mesh_no_shader(self, colour):
@@ -412,46 +418,25 @@ class Voxel:
         glColor4fv(colour)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
-        glDrawElementsus(GL_TRIANGLES, self.indices)
+        glDrawArrays(GL_TRIANGLES, 0, len(self.verts) // 3)
 
     def create_verts_from_data(self, voxel_data):
         """Creates the verts from raw voxel data"""
         verts = []
-        z = 0
-        while z < voxel_data.height - 1:
+        layer = 0
+        while layer < voxel_data.height - 1:
             y = 0
             while y < voxel_data.depth - 1:
                 x = 0
                 while x < voxel_data.width - 1:
-                    self.calc_chunk(x, y, z, voxel_data, verts)
+                    calc_cube(layer, x, y, voxel_data, verts)
                     x += 1
                 y += 1
-            z += 1
+            layer += 1
         return verts
 
-    def calc_chunk(self, x, y, z, voxel_data, verts):
-        """Calculates the verts for a single trig"""
-        corners = get_corners(x, y, z, voxel_data)
-        cube_index = get_cube_index(corners, voxel_data.surface_level)
-        i = 0
-        while tri_table[cube_index][i] != -1:
-            a0 = index_a[tri_table[cube_index][i]]
-            b0 = index_b[tri_table[cube_index][i]]
-            a1 = index_a[tri_table[cube_index][i + 1]]
-            b1 = index_b[tri_table[cube_index][i + 1]]
-            a2 = index_a[tri_table[cube_index][i + 2]]
-            b2 = index_b[tri_table[cube_index][i + 2]]
-            i_0 = len(verts) / 3
-            verts.extend(interpolate(corners[a0], corners[b0], voxel_data.surface_level))
-            verts.extend(interpolate(corners[a1], corners[b1], voxel_data.surface_level))
-            verts.extend(interpolate(corners[a2], corners[b2], voxel_data.surface_level))
-            self.indices.extend([i_0, i_0 + 1, i_0 + 2])
-            i += 3
-
     def redraw(self):
-        self.indices = []
         self.verts = np.array(self.create_verts_from_data(self.voxel_data), dtype='f')
-        self.indices = np.array(self.indices, dtype=np.int32)
         self.voxel_data.redraw = False
         print("ReDrawn")
 
@@ -472,46 +457,58 @@ class Voxel:
         return norms
 
 
-def interpolate(v1, v2, surface_level):
-    """Gets estimated position of vert"""
-    t = (surface_level - v1[3]) / (v2[3] - v1[3])
-    ret = [v1[0] + t * (v2[0] - v1[0]),
-           v1[1] + t * (v2[1] - v1[1]),
-           v1[2] + t * (v2[2] - v1[2])]
-    return ret
+def calc_cube(layer, x, y, voxel_data, verts):
+    corners = calc_corners(layer, x, y)
+    visible_corners = get_visible_corners(corners, voxel_data.surface_level, voxel_data.stored)
+    i = 0
+    while tri_table[visible_corners][i] != -1:
+        i_start = index_a[tri_table[visible_corners][i]]
+        i_end = index_b[tri_table[visible_corners][i]]
+        verts.append(interpolate(voxel_data.stored, voxel_data.surface_level, corners[i_start], corners[i_end]))
+        i += 1
 
 
-def get_cube_index(corners, surface_level):
-    """Gets all the 'on' corners"""
-    cube_index = 0
-    if corners[0][-1] < surface_level:
-        cube_index |= 1
-    if corners[1][-1] < surface_level:
-        cube_index |= 2
-    if corners[2][-1] < surface_level:
-        cube_index |= 4
-    if corners[3][-1] < surface_level:
-        cube_index |= 8
-    if corners[4][-1] < surface_level:
-        cube_index |= 16
-    if corners[5][-1] < surface_level:
-        cube_index |= 32
-    if corners[6][-1] < surface_level:
-        cube_index |= 64
-    if corners[7][-1] < surface_level:
-        cube_index |= 128
-    return cube_index
+def interpolate(stored, visible_level, start, end):
+    s_dense = get_density(start, stored)
+    e_dense = get_density(end, stored)
+    val = (visible_level - s_dense) / (e_dense - s_dense)
+    return[start[0] + (val * (end[0] - start[0])),
+           start[2] + (val * (end[2] - start[2])),
+           start[1] + (val * (end[1] - start[1]))]
 
 
-def get_corners(x, y, z, voxel_data):
-    """Gets the all the corners"""
+def calc_corners(layer, x, y):
+    return [(x, y, layer),
+            (x + 1, y, layer),
+            (x + 1, y, layer + 1),
+            (x, y, layer + 1),
+            (x, y + 1, layer),
+            (x + 1, y + 1, layer),
+            (x + 1, y + 1, layer + 1),
+            (x, y + 1, layer + 1)]
 
-    return [(x, y, z, voxel_data.stored[x][z][y]),
-            (x + 1, y, z, voxel_data.stored[x + 1][z][y]),
-            (x + 1, y, z + 1, voxel_data.stored[x + 1][z + 1][y]),
-            (x, y, z + 1, voxel_data.stored[x][z + 1][y]),
-            (x, y + 1, z, voxel_data.stored[x][z][y + 1]),
-            (x + 1, y + 1, z, voxel_data.stored[x + 1][z][y + 1]),
-            (x + 1, y + 1, z + 1, voxel_data.stored[x + 1][z + 1][y + 1]),
-            (x, y + 1, z + 1, voxel_data.stored[x][z + 1][y + 1])]
+
+def get_visible_corners(corners, vis_level, stored):
+    visible_corners = 0
+    if get_density(corners[0], stored) > vis_level:
+        visible_corners |= 1
+    if get_density(corners[1], stored) > vis_level:
+        visible_corners |= 2
+    if get_density(corners[2], stored) > vis_level:
+        visible_corners |= 4
+    if get_density(corners[3], stored) > vis_level:
+        visible_corners |= 8
+    if get_density(corners[4], stored) > vis_level:
+        visible_corners |= 16
+    if get_density(corners[5], stored) > vis_level:
+        visible_corners |= 32
+    if get_density(corners[6], stored) > vis_level:
+        visible_corners |= 64
+    if get_density(corners[7], stored) > vis_level:
+        visible_corners |= 128
+    return visible_corners
+
+
+def get_density(corner, stored):
+    return stored[corner[0]][corner[2]][corner[1]]
 

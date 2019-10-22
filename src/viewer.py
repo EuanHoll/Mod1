@@ -17,23 +17,22 @@ def viewer(map_data):
     pygame.display.set_caption("Mod1")
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, c.S_RATIO, 0.1, 1000)
-    ter = terrain.get_terrain(map_data)
-    glTranslate(-(ter.voxel_data.width / 2), -ter.voxel_data.height, -ter.voxel_data.depth)
-    glRotatef(45, -90, 0, 0)
+    glTranslate(-10, -4, -40)
+    glRotatef(30, 1, 0, 0)
     glEnable(GL_LIGHT0)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     glClearColor(0.411, 0.451, 0.5412, 1)
-    loop(screen, ter)
+    loop(screen, map_data)
 
 
-def loop(screen, ter):
+def loop(screen, map_data):
     """The main game loop"""
     running = True
-    water = vx.Voxel(vx.Voxel_Data(ter.voxel_data.width, c.MAX_HEIGHT, ter.voxel_data.depth, 0.6, 0), "water.ver", "water.frag")
+    water = vx.Voxel(vx.Voxel_Data(22, c.MAX_HEIGHT + 2, 22, 0.3, 1), "water.ver", "water.frag")
+    ter = terrain.get_terrain(map_data)
     start_time = rf.get_time()
-    fps = 0
     counter = 0
     while running:
         for event in pygame.event.get():
