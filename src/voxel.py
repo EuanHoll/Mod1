@@ -499,12 +499,24 @@ def get_cube_index(corners, surface_level):
 
 def get_corners(x, y, z, voxel_data, maxes):
     """Gets the all the corners"""
-    n_x = (x / voxel_data.width) * maxes[0]
-    n_y = (y / voxel_data.depth) * maxes[2]
-    n_z = (z / voxel_data.height) * maxes[1]
-    n_x_o = 1 / maxes[0]
-    n_y_o = 1 / maxes[1]
-    n_z_o = 1 / maxes[2]
+    if voxel_data.width != maxes[0]:
+        n_x = (x / voxel_data.width) * maxes[0]
+        n_x_o = 1 / maxes[0]
+    else:
+        n_x = x
+        n_x_o = 1
+    if voxel_data.height != maxes[1]:
+        n_z = (z / voxel_data.height) * maxes[1]
+        n_z_o = 1 / maxes[2]
+    else:
+        n_z = z
+        n_z_o = 1
+    if voxel_data.width != maxes[2]:
+        n_y = (y / voxel_data.depth) * maxes[2]
+        n_y_o = 1 / maxes[1]
+    else:
+        n_y = y
+        n_y_o = 1
     return [(n_x, n_y, n_z, voxel_data.stored[x][z][y]),
             (n_x + n_x_o, n_y, n_z, voxel_data.stored[x + 1][z][y]),
             (n_x + n_x_o, n_y, n_z + n_z_o, voxel_data.stored[x + 1][z + 1][y]),

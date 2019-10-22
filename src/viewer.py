@@ -4,6 +4,7 @@ import resource_functions as rf
 import pygame
 import const as c
 import water_physics as wp
+import numpy as np
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -17,7 +18,7 @@ def viewer(map_data):
     pygame.display.set_icon(rf.load_icon("icon.png"))
     gluPerspective(60, c.S_RATIO, 0.1, 1000)
     ter = terrain.get_terrain(map_data)
-    glTranslate(-(ter.maxes[0] / 2), -(ter.maxes[2] / 2), -10)
+    glTranslate(-(ter.maxes[0] / 2), -ter.maxes[2] / 3, -ter.maxes[1] * 2)
     glRotatef(45, -90, 0, 0)
     glEnable(GL_LIGHT0)
     glEnable(GL_DEPTH_TEST)
@@ -30,7 +31,7 @@ def viewer(map_data):
 def loop(screen, ter):
     """The main game loop"""
     running = True
-    water = vx.Voxel(vx.Voxel_Data(ter.maxes[0], ter.maxes[1] + 1, ter.maxes[2], 0.6, 2), (ter.maxes[0], ter.maxes[2] + 1, ter.maxes[2]), "water.ver", "water.frag")
+    water = vx.Voxel(vx.Voxel_Data(ter.voxel_data.width, c.MAX_HEIGHT, ter.voxel_data.depth, 0.6, 2), (ter.voxel_data.width, c.MAX_HEIGHT, ter.voxel_data.depth), "water.ver", "water.frag")
     start_time = rf.get_time()
     fps = 0
     counter = 0

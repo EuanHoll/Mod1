@@ -13,8 +13,8 @@ def get_terrain(map_data):
 
 def get_voxel_data(map_data):
     map3d = get_map_3d(map_data)
-    vd = vx.Voxel_Data(map3d.width, c.MAX_HEIGHT, map3d.height, 0.9, 3)
-    vd.stored = np.array(get_voxel_map(map3d, vd))
+    vd = vx.Voxel_Data(map3d.width, c.MAX_HEIGHT, map3d.height, 0.4, 3)
+    vd.stored = get_voxel_map(map3d, vd)
     return vd
 
 
@@ -52,12 +52,12 @@ def get_map_3d(map_data):
                 verts.append([x, y, 0])
             x += 1
         y += 1
-    verts = expand_map(verts, (map_data.width + 2, map_data.height + 2), ((map_data.width + 2) * 10, (map_data.height + 2) * 10), 10)
+    verts = expand_map(verts, (map_data.width + 2, map_data.height + 2), ((map_data.width + 2) * 10, (map_data.height + 2) * 10))
     smooth_verts(verts, (map_data.width + 2) * 10, (map_data.height + 2) * 10)
     return map.Map_3d(verts, (map_data.width + 2) * 10, (map_data.height + 2) * 10)
 
 
-def expand_map(verts, now, expanded, e_amount):
+def expand_map(verts, now, expanded):
     ver = []
     y = 0
     while y < expanded[1]:
