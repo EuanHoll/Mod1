@@ -368,6 +368,8 @@ class Voxel:
         self.vbo_ind = vbo.VBO(self.indices)
         self.shader = None
         self.maxes = maxes
+        #self.norms = np.array(self.calc_norms(), dtype='f')
+        self.light_pos = [self.maxes[0], c.MAX_HEIGHT, self.maxes[2], 1]
         self.voxel_data.redraw = False
         if vert_sha != None and frag_sha != None:
             self.shader = self.create_shader(vert_sha, frag_sha)
@@ -393,6 +395,7 @@ class Voxel:
         return shader
 
     def draw_mesh_shader(self):
+        """Draws the data stored in the voxel_data with a shader"""
         if self.shader == None:
             print("You have no shader")
             quit()
@@ -400,18 +403,17 @@ class Voxel:
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
-        glVertexAttrib4fv(2, (self.maxes[0] * 2, 0, 0, 2))
+        glVertexAttrib4fv(2, self.light_pos)
         glVertexAttrib1f(3, c.MAX_HEIGHT)
         glDrawElementsus(GL_TRIANGLES, self.indices)
         glUseProgram(0)
 
-    def draw_mesh_no_shader(self):
-        """Draws the data stored in the Voxel Data"""
-        glColor4fv((0, 0, 1, 0.2))
+    def draw_mesh_no_shader(self, colour):
+        """Draws the data stored in the Voxel Data without a shader"""
+        glColor4fv(colour)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, self.verts)
         glDrawElementsus(GL_TRIANGLES, self.indices)
-
 
     def create_verts_from_data(self, voxel_data, maxes):
         """Creates the verts from raw voxel data"""
@@ -427,7 +429,6 @@ class Voxel:
                 y += 1
             z += 1
         return verts
-
 
     def calc_chunk(self, x, y, z, voxel_data, verts, maxes):
         """Calculates the verts for a single trig"""
@@ -447,6 +448,22 @@ class Voxel:
             verts.extend(interpolate(corners[a2], corners[b2], voxel_data.surface_level))
             self.indices.extend([i_0, i_0 + 1, i_0 + 2])
             i += 3
+
+    def calc_norms(self):
+        norms = []
+        i = 0
+        ver = np.copy(self.verts)
+        length = len(self.verts)
+        while i < length:
+            v_0 = np.array([ver.item(i), ver.item(i + 1), ver.item(i + 2)])
+            v_1 = np.array([ver.item(i + 3), ver.item(i + 4), ver.item(i + 5)])
+            v_2 = np.array([ver.item(i + 6), ver.item(i + 7), ver.item(i + 8)])
+            n = np.cross(np.subtract(v_1, v_0), np.subtract(v_2, v_0))
+            if n.max() != 0:
+                n = n / n.max()
+            norms.extend(n)
+            i += 9
+        return norms
 
 
 def interpolate(v1, v2, surface_level):
